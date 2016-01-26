@@ -56,6 +56,10 @@ class Shell(cmd.Cmd):
     destination = os.environ['HOME'] if not(len(argv)) else argv[-1].replace('~', os.environ['HOME'])
     os.chdir(destination)
     self.reload_shell() 
+  
+  def do_mkdir(self, args):
+    argv = self.sh(args)
+    map(os.makedirs, map(os.path.abspath, argv))
  
   def do_ls(self, args):
     argv = self.sh(args)
