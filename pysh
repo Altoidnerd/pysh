@@ -67,7 +67,7 @@ class Shell(cmd.Cmd):
         file_name = url.split('/')[-1]
         response = urllib2.urlopen(url)
         file_ = open(file_name, 'wb')
-        meta = response.info
+        meta = response.info()
         file_size = int(meta.getheaders("Content-Length")[0]) 
         print(	pc.OKGREEN +  "Downloading: {}".format(file_name) + pc.ENDC + '\n',
 		pc.OKBLUE  +  "Bytes: {}".format(file_size)       + pc.ENDC + '\n')
