@@ -37,7 +37,7 @@ import glob, os.path
 
 class BetterParser:
     def __init__(self):
-        self.environ = {"$HOME": os.path.expanduser('~')}
+        self.environ = {'$HOME': os.environ['HOME']}
     def parse(self, instr):
         instr = instr.rstrip('\r\n\t ')
         # Handle all three steps of parsing:
