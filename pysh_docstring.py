@@ -56,7 +56,8 @@ def print_docstring():
 
 	{bfail}{command}{endc} 	Copy standard input to standard output
 	
-{warning}AUTHOR{endc}""".format(bfail 	 = pc.bFAIL,
+{warning}AUTHOR{endc}\n\tWritten by Torbjorn Granlund and Richard M. Stallman.
+		""".format(bfail 	 = pc.bFAIL,
 				okblue 	 = pc.OKBLUE, 
 				okgreen  = pc.OKGREEN,
 				endc 	 = pc.ENDC,
