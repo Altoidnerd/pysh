@@ -4,7 +4,7 @@ from printcolors import PrintColors as pc
 
 def print_docstring():
   fstring = """
-{bfail}{command}{endc}			{bwarning}User Commands{endc}			{bfail}{command}{endc}
+{bfail}{command}({okgreen}1{endc}{endc}			{bwarning}User Commands{endc}			{bfail}{command}(}okgreen}1{endc}){endc}
 
 {warning}NAME{endc}
 
@@ -56,7 +56,23 @@ def print_docstring():
 
 	{bfail}{command}{endc} 	Copy standard input to standard output
 	
-{warning}AUTHOR{endc}\n\tWritten by Torbjorn Granlund and Richard M. Stallman.
+{warning}AUTHOR{endc}
+	Written by Torbjorn Granlund and Richard M. Stallman.
+
+{warnin}REPORTING BUGS{endc}
+       Report cat bugs to bug-coreutils@gnu.org
+       GNU coreutils home page: <http://www.gnu.org/software/coreutils/>
+       General help using GNU software: <http://www.gnu.org/gethelp/>
+       Report cat translation bugs to <http://translationproject.org/team/>
+
+{warning}COPYRIGHT{endc}
+       Copyright © 2013 Free Software Foundation, Inc.  License GPLv3+: GNU
+       GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+       This is free software: you are free to change and  redistribute  it.
+       There is NO WARRANTY, to the extent permitted by law.
+
+{warning}SEE ALSO{endc}
+       {fail}tac{endc}({okgreen}1{endc})
 		""".format(bfail 	 = pc.bFAIL,
 				okblue 	 = pc.OKBLUE, 
 				okgreen  = pc.OKGREEN,
@@ -68,8 +84,7 @@ def print_docstring():
 				one_liner="con{warning}cat{endc}enate files and print them on the standard output.".format(warning = pc.WARNING,endc = pc.ENDC ))
   
   print(fstring)
-
-
+  
 if __name__ == '__main__':
   print_docstring()
 
