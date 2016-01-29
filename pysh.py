@@ -66,10 +66,11 @@ class Shell(cmd.Cmd):
  
   def do_ls(self, args):
     argv = self.sh(args)
+    options = [x for x in argv if x.startswith('-')
     target = '.' if len(argv) == 0 else argv[-1]
     # check for -a
-    if '-a' in argv:
-      for file_ in [elem for elem in os.listdir(target)]: print('\t'+file_)
+    if '-a' in options:
+      
     # filter hidden files
     for file_ in [elem for elem in os.listdir(target) if not(elem.startswith('.'))]: print('\t'+file_)
 
@@ -129,6 +130,7 @@ class Shell(cmd.Cmd):
           sys.stdout.write("{}{}".format(prefix, line))
       except StopIteration:
         break
+    f.close()
 
   def do_cat(self, args):
     argv = self.sh(args)
@@ -152,15 +154,6 @@ class Shell(cmd.Cmd):
     string += '\n'
     print string,
   
-  def do_history(self, args):
-   argv = self.sh(args)
-   f = open("~/.pysh/history",'r')
-   while True:
-     try:
-       sys.stdout.write(f.next())
-     except StopIteration:
-       break
-
   def help_print(self):
     from pysh_docstring import print_docstring
     print_doctsring() 
