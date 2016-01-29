@@ -2,13 +2,16 @@
 
 import time, cmd, sys, os, urllib2, requests, subprocess, zipfile, tarfile, gzip
 from parser import BetterParser
-from printcolors import PrintColors as pc
+from printcolors import PrintColors
+
+pc=PrintColors()
 
 
 class Shell(cmd.Cmd):
 
   def __init__(self):
     cmd.Cmd.__init__(self)
+    self.prompt = pc.WARNING + str(os.getcwd().replace(os.environ['HOME'], '~')) + pc.ENDC + pc.bFAIL + ' >  ' + pc.ENDC
     self._sh = BetterParser()
     self._sh.environ['HOME'] = os.environ['HOME']
     self.did_quit = False
@@ -104,23 +107,39 @@ class Shell(cmd.Cmd):
    
   def do_grep(self, args):
     argv = self.sh(args)
-    for arg in argv:
-      target = argv[-1]
-    print("grep is coming soon")
-
+    target = argv[-1]
+    options = [x for x in argv[:-1] if str(x).startswith('-')]
+    patterns = [str(x) for x in argv[:-1] if (x not in options)]
+    f = open(target,'r')
+    lineNo = 0
+    while True:
+      try:
+        line = f.next()
+        lineNo += 1
+        matches = [x for x in patterns if (str(x)) in line]
+        prefix = ''
+        count = 0
+        if matches:
+          count += 1
+          if "-n" in options: 
+            prefix += pc.OKGREEN+str(lineNo)+pc.ENDC+pc.OKBLUE+':'+pc.ENDC
+          if not ("--color=never" in options):
+            for match in matches:
+              line = line.replace(match, pc.bFAIL+match+pc.ENDC)
+          sys.stdout.write("{}{}".format(prefix, line))
+      except StopIteration:
+        break
 
   def do_cat(self, args):
-    def cat_kernel(argv_):
-      for line in open(str(argv_[-1]), 'r').readlines():
-        sys.stdout.write(line+'\n')
-        try:
-          _ = argv_[-2]
-        except IndexError:
-          break
-        if _:
-          cat_kernel(argv_[:-1])
-    cat_kernel(self.sh(args))
-
+    argv = self.sh(args)
+    def _cat(_file):
+      with open(_file, 'r') as f:
+        for line in f.readlines():
+          sys.stdout.write(line)
+        f.close()
+    for item in argv:
+      _cat(item)      
+    
   def do_EOF(self, args):
     return True
 
@@ -132,14 +151,23 @@ class Shell(cmd.Cmd):
       string += (arg+' ')
     string += '\n'
     print string,
-
+  
+  def do_history(self, args):
+   argv = self.sh(args)
+   f = open("~/.pysh/history",'r')
+   while True:
+     try:
+       sys.stdout.write(f.next())
+     except StopIteration:
+       break
 
   def help_print(self):
     from pysh_docstring import print_docstring
     print_doctsring() 
    
   def postcmd(self, stop, args):
-    pass # can use this to quit with did_quit 
+    pass 
+    
 
 
 def main():
@@ -150,7 +178,6 @@ def main():
 		)
 	)
   shell = Shell()
-  shell.prompt = pc.WARNING + str(os.getcwd().replace(os.environ['HOME'], '~')) + pc.ENDC + pc.bFAIL + ' >  ' + pc.ENDC
   shell.cmdloop()
   
 if __name__=='__main__':
